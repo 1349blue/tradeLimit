@@ -1,0 +1,21 @@
+{
+  "name": "okx-trading-app",
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "start": "node server.js",
+    "build": "webpack --mode production",
+    "test": "jest"
+  },
+  "dependencies": {
+    "trading-vue-js": "^1.0.2",
+    "socket.io-client": "^4.0.0",
+    "crypto-js": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "jest": "^27.0.0",
+    "webpack": "^5.0.0"
+  }
+} 

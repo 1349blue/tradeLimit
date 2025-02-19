@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKX Trading Assistant</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <h1>OKX Trading Assistant</h1>
+
+    <div class="container">
+        <!-- API Configuration Section -->
+        <div class="section api-config">
+            <h2>Cấu hình API</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="apiKey">API Key:</label>
+                    <input type="text" id="apiKey" placeholder="Nhập API Key">
+                </div>
+                <div class="form-group">
+                    <label for="secretKey">Secret Key:</label>
+                    <input type="password" id="secretKey" placeholder="Nhập Secret Key">
+                </div>
+                <div class="form-group">
+                    <label for="passphrase">Passphrase:</label>
+                    <input type="password" id="passphrase" placeholder="Nhập Passphrase">
+                </div>
+            </div>
+        </div>
+
+        <!-- Trading & Strategy Parameters Section -->
+        <div class="section trading-strategy-params">
+            <h2>Tham số Giao dịch & Chiến lược</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="tokenName">Token:</label>
+                    <input type="text" id="tokenName" value="LINK" placeholder="Ví dụ: BTC">
+                </div>
+                <div class="form-group">
+                    <label for="totalAmount">Tổng số lượng Token:</label>
+                    <input type="number" id="totalAmount" value="1" step="0.001" placeholder="Tổng số token hiện có">
+                </div>
+                <div class="form-group">
+                    <label for="tradeBias">Độ lệch giữa mua-bán (%):</label>
+                    <input type="number" id="tradeBias" value="0.5" step="0.1" placeholder="Ví dụ: 0.5">
+                </div>
+                <div class="form-group">
+                    <label for="tradeLimit">Giới hạn đổi giá (%):</label>
+                    <input type="number" id="tradeLimit" value="0.5" step="0.1" placeholder="Ví dụ: 0.5">
+                </div>
+                <div class="form-group">
+                    <label for="maxMatrixSize">Số lượng phần tử tối đa trong ma trận:</label>
+                    <input type="number" id="maxMatrixSize" value="5" step="1" min="1" placeholder="Ví dụ: 5">
+                </div>
+                <div class="form-group">
+                    <label for="priceDeviation">Tỉ lệ lệch giá cho phép tạo mới (%):</label>
+                    <input type="number" id="priceDeviation" value="1.5" step="0.1" min="0.1" placeholder="Ví dụ: 1.5">
+                </div>
+                <div class="form-group">
+                    <label for="upperPriceLimit">Giới hạn giá trên:</label>
+                    <input type="number" id="upperPriceLimit" value="0" step="0.000001" min="0" placeholder="Nhập giới hạn giá trên">
+                </div>
+                <div class="form-group">
+                    <label for="lowerPriceLimit">Giới hạn giá dưới:</label>
+                    <input type="number" id="lowerPriceLimit" value="0" step="0.000001" min="0" placeholder="Nhập giới hạn giá dưới">
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="control-buttons">
+            <div class="trading-buttons">
+                <button id="startBtn">Bắt đầu Giao dịch</button>
+                <button id="stopBtn" class="stop-btn">Dừng Giao dịch</button>
+                <button id="saveConfigBtn">Lưu Cấu hình</button>
+                <button id="loadConfigBtn">Tải Cấu hình</button>
+                <input type="file" id="configFileInput" accept=".json" style="display: none;">
+            </div>
+        </div>
+
+        <!-- Trading Status -->
+        <div id="tradingStatus" class="status trading-inactive">
+            Trạng thái: Chưa giao dịch
+        </div>
+
+        <!-- Advanced Parameters Section -->
+        <div class="section params-section">
+            <h2>Tham số Nâng cao</h2>
+            <table id="paramsAdvanced">
+                <tbody>
+                    <tr>
+                        <td>Giá hiện tại:</td>
+                        <td id="currentPrice">-</td>
+                        <td>Trạng thái:</td>
+                        <td id="enumStatus">-</td>
+                    </tr>
+                    <tr>
+                        <td>Giá bán:</td>
+                        <td id="sellPrice">-</td>
+                        <td>Giá mua:</td>
+                        <td id="buyPrice">-</td>
+                    </tr>
+                    <tr>
+                        <td>D_B:</td>
+                        <td id="d_b">-</td>
+                        <td>A_B:</td>
+                        <td id="a_b">-</td>
+                    </tr>
+                    <tr>
+                        <td>D_M:</td>
+                        <td id="d_m">-</td>
+                        <td>A_M:</td>
+                        <td id="a_m">-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Thêm vào sau phần Advanced Parameters Section -->
+        <div class="section matrix-section">
+            <div class="matrix-header">
+                <h2>Ma trận Lệnh</h2>
+                <button id="clearMatrixBtn" class="clear-btn">Xóa Ma trận</button>
+            </div>
+            <table id="orderMatrix">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Giá bán</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sẽ được điền bởi JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- History Section -->
+        <div class="section history-section">
+            <div class="history-header">
+                <h2>Lịch sử Giao dịch</h2>
+                <button id="clearHistoryBtn" class="clear-btn">Xóa Lịch sử</button>
+            </div>
+            <table id="tradeHistory">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sẽ được điền bởi JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Log Section -->
+        <div class="section log-section">
+            <div class="log-header">
+                <h2>Nhật ký Giao dịch</h2>
+                <button id="clearLogBtn" class="clear-btn">Xóa Log</button>
+            </div>
+            <div id="logContainer" class="log-container">
+                <!-- Log entries sẽ được thêm vào đây -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 
